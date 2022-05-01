@@ -74,8 +74,6 @@ function Map() {
     };
     useEffect(() => {
         fetchAllCounts();
-
-
     }, [])
     return (
         <div className='map-container'>

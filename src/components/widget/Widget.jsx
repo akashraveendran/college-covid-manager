@@ -1,15 +1,12 @@
 import "./widget.scss";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../store/AuthContext";
 import { firestore } from "../../firebase/config";
 
 const Widget = ({ type }) => {
-  const { getUsersCount } = useAuth()
   const [studentCount, setStudentCount] = useState()
   const [vCount, setVCount] = useState()
   const [msgCount, setMsgCount] = useState()
@@ -26,7 +23,7 @@ const Widget = ({ type }) => {
   }
   const fetchMessageCount = async () => {
     try {
-      firestore.collection('notifications').get().then((snapshot) => {
+      firestore.collection('notifications').where('to', '==', 'admin').get().then((snapshot) => {
         // console.log(snapshot.size)
         setMsgCount(snapshot.size)
       })
@@ -72,8 +69,6 @@ const Widget = ({ type }) => {
     }
   }, [studentCount])
   let data;
-
-
   switch (type) {
     case "Registered":
       data = {

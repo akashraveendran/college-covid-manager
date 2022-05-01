@@ -1,6 +1,7 @@
 import { Button, Card } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { firestore } from '../../../firebase/config';
 import { useAuth } from '../../../store/AuthContext'
 import Navbar from '../Navbar';
 
@@ -9,6 +10,11 @@ function Notifications() {
     const [messages, setMessages] = useState()
     const [exams, setExams] = useState();
     const navigate = useNavigate()
+    const clickDelete = (id) => {
+        firestore.collection('notifications').doc(id).delete().then(() => {
+            navigate('/')
+        })
+    }
     async function fetchMessage() {
         try {
             let result = await getAllMessages()
@@ -21,9 +27,12 @@ function Notifications() {
                 }
                 if (data.from == "admin") {
                     if (data.appliedUsers.length != 0) {
-                        data.appliedUsers.forEach((mail) => {
+                        data.appliedUsers.every((mail) => {
                             if (mail != currentUser.email) {
                                 obj2.push({ docId: m.id, ...m.data() })
+                                return false;
+                            } else {
+                                return false;
                             }
                         })
                     } else obj2.push({ docId: m.id, ...m.data() })
@@ -67,6 +76,7 @@ function Notifications() {
                                     <p>To : {element.to}</p>
                                     <p>message : {element.message}</p>
                                     <p>date : {element.dateString}</p>
+                                    <td><Button variant="contained" color="error" style={{ marginTop: '20px' }} onClick={() => { clickDelete(element.docId) }}>Delete </Button></td>
                                 </Card>
                             ))
                         }

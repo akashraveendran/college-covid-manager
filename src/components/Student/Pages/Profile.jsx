@@ -25,8 +25,8 @@ function Profile() {
             <div className="container">
                 <div className="img-section">
                     <img src="https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png" alt="profile" width="200" height="200" />
-                    <Typography fontSize={'28px'} fontWeight={700}>Student </Typography>
-                    <Typography fontSize={'25px'}>Course </Typography>
+                    <Typography fontSize={'28px'} fontWeight={700}>{user && user.name} </Typography>
+                    <Typography fontSize={'25px'}>{user && user.course} </Typography>
                 </div>
                 <div className="data">
                     <div className="title-container">
@@ -46,8 +46,11 @@ function Profile() {
                             <div style={{ display: "flex", flexDirection: "column", height: '80%' }}>
                                 <p>Affected : {user.covidStatus}</p>
                                 <p>Vaccinated : {user.vaccinated}</p>
-                                <p>Date : {user.vaccinationDate}</p>
-                                <p>Dose : {user.vaccinationDose}</p>
+                                {
+                                    user.vaccinated == "yes" && <><p>Date : {user.vaccinationDate}</p>
+                                        <p>Dose : {user.vaccinationDose}</p></>
+                                }
+
                             </div>
                         </Card>
                     }

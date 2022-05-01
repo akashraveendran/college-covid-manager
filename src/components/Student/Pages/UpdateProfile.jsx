@@ -20,6 +20,8 @@ function UpdateProfile() {
                 console.log(error)
             }
             setLoading(false)
+            setCovidStatus(user && user.covidStatus)
+            setVaccinated(user && user.vaccinated)
         }
         fetchdata();
     }, [])
@@ -145,7 +147,8 @@ function UpdateProfile() {
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
                             required={true}
-                            defaultValue={user.covidStatus}
+                            value={user.covidStatus && user.covidStatus}
+
                         >
                             <FormControlLabel value="yes" onClick={(e) => { setCovidStatus(e.target.value) }} control={<Radio />} label="Yes" />
                             <FormControlLabel value="no" onClick={(e) => { setCovidStatus(e.target.value) }} control={<Radio />} label="No" />
@@ -156,11 +159,11 @@ function UpdateProfile() {
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
                             required={true}
-                            defaultValue={user.vaccinated}
+                            defaultValue={user.vaccinated && user.vaccinated}
 
                         >
                             <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setShowDiv(true); setVaccinated("yes") }} />
-                            <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no") }} />
+                            <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no"); vaccinDateRef.current.value = false; vaccinDoseRef.current.value = false }} />
                         </RadioGroup>
 
                         <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>

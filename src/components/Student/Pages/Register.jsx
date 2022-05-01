@@ -25,7 +25,16 @@ function Register() {
         e.preventDefault();
         console.log(name, phoneNumber, vaccinated, regNumber, email, department, course, covidStatus, vaccinationDate, vaccinationDose);
         let userObj = {
-            name, phoneNumber, email, regNumber, department, course, covidStatus, vaccinated, vaccinationDate, vaccinationDose
+            name,
+            phoneNumber,
+            email,
+            regNumber,
+            department,
+            course,
+            covidStatus,
+            vaccinated,
+            vaccinationDate,
+            vaccinationDose
         }
 
         console.log(userObj)
@@ -136,8 +145,8 @@ function Register() {
                     name="radio-buttons-group"
                     required={true}
                 >
-                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setShowDiv(true); setVaccinated("yes") }} />
-                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no") }} />
+                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setShowDiv(true); setVaccinated("yes"); }} />
+                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no"); setVaccinationDose(false); setVaccinationDate(false) }} />
                 </RadioGroup>
 
                 <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>
