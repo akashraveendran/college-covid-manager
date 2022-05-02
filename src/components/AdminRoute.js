@@ -4,5 +4,6 @@ import { useAuth } from '../store/AuthContext'
 
 export default function AdminRoute({ children }) {
     const { currentUser } = useAuth()
-    return currentUser ? children : <Navigate to="/admin/login" />
+    let admin = currentUser.displayName != "Student" && currentUser.displayName != "TEACHER"
+    return (admin ? children : <Navigate to="/admin/login" />)
 }
