@@ -68,6 +68,34 @@ const Sidebar = () => {
               <span>Vaccination</span>
             </li>
           </Link>
+
+          <p className="title">TEACHERS</p>
+          <Link to="/admin/teachers/new" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Teacher register</span>
+            </li>
+          </Link>
+          <Link to="/admin/teachers" style={{ textDecoration: "none" }}>
+            <li>
+              <StoreIcon className="icon" />
+              <span>Teacher Management</span>
+            </li>
+          </Link>
+          <Link to="/admin/teachers/covid-status" style={{ textDecoration: "none" }}>
+            <li>
+              <CreditCardIcon className="icon" />
+              <span>Covid Status</span>
+            </li>
+          </Link>
+          <Link to="/admin/teachers/vaccinated" style={{ textDecoration: "none" }}>
+            <li>
+              <LocalShippingIcon className="icon" />
+              <span>Vaccination</span>
+            </li>
+          </Link>
+
+          <p className="title">ADMIN</p>
           <Link to="/admin/messages" style={{ textDecoration: "none" }}>
             <li>
               <ChatBubbleOutlineOutlinedIcon className="icon" />
@@ -86,7 +114,7 @@ const Sidebar = () => {
               <span>Exams </span>
             </li>
           </Link>
-          <p className="title">ADMIN</p>
+
           <li>
             <ExitToAppIcon className="icon" />
             <span onClick={clickedlogout}>Logout</span>

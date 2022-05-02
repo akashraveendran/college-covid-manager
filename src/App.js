@@ -29,6 +29,8 @@ import TeacherRoute from "./components/TeacherRoute";
 import TeacherLogin from "./components/Teacher/pages/TeacherLogin";
 import TeacherContactPage from "./components/Teacher/pages/TeacherContactPage";
 import TeacherNotifications from "./components/Teacher/pages/TeacherNotifications";
+import NewTeacher from "./pages/new/Newteacher";
+
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -43,17 +45,27 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="students">
                 <Route index element={<AdminRoute><List students="Students" /></AdminRoute>} />
-                <Route path="student" element={<AdminRoute><Single /></AdminRoute>} />
-                <Route path="vaccinated" element={<AdminRoute><List vaccinated="vaccinated" /></AdminRoute>} />
-                <Route path="covid-status" element={<AdminRoute><List covidStatus="covid-status" /></AdminRoute>} />
+                <Route path="student" element={<AdminRoute><Single student /></AdminRoute>} />
+                <Route path="vaccinated" element={<AdminRoute><List vaccinated="vaccinated" student /></AdminRoute>} />
+                <Route path="covid-status" element={<AdminRoute><List covidStatus="covid-status" student /></AdminRoute>} />
                 <Route path="add-notification" element={<AdminRoute><NewExam title="Add New Exam Notification" /></AdminRoute>} />
                 <Route path="Exams" element={<AdminRoute><List exams="Exams" /></AdminRoute>} />
                 <Route
                   path="new"
-                  element={<AdminRoute><New title="Add New Student" /></AdminRoute>}
+                  element={<AdminRoute><NewTeacher title="Add New Student" /></AdminRoute>}
                 />
               </Route>
               <Route path="messages" element={<AdminRoute><List messages="Messages" /></AdminRoute>} />
+              <Route path="teachers">
+                <Route index element={<AdminRoute><List teachers="Teachers" /></AdminRoute>} />
+                <Route path="teacher" element={<AdminRoute><Single teacher /></AdminRoute>} />
+                <Route
+                  path="new"
+                  element={<AdminRoute><NewTeacher title="Add New Teacher" /></AdminRoute>}
+                />
+                <Route path="covid-status" element={<AdminRoute><List covidStatus="covid-status" teacher /></AdminRoute>} />
+                <Route path="vaccinated" element={<AdminRoute><List vaccinated="vaccinated" teacher /></AdminRoute>} />
+              </Route>
             </Route>
 
             <Route path='/' >

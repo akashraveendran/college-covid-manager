@@ -8,13 +8,16 @@ import { useAuth } from "../../store/AuthContext"
 import VaccinatedTable from "../../components/datatable/VaccinatedTable"
 import CovidTable from "../../components/datatable/CovidTable"
 import ExamTable from "../../components/datatable/ExamTable"
+import TeacherTable from "../../components/datatable/TeacherTable"
 
-const List = ({ students, messages, vaccinated, covidStatus, exams }) => {
-  const { getAllUsers, getAllMessages, getVaccinatedUsers } = useAuth()
+const List = ({ students, messages, vaccinated, covidStatus, exams, teachers, teacher, student }) => {
+  const { getAllUsers, getAllMessages, getVaccinatedUsers, getVaccinatedTeachers, getAllTeachers } = useAuth()
   const [userList, setUserList] = useState()
+  const [teacherList, setTeacherList] = useState()
   const [msgList, setMsgList] = useState();
   const [examList, setExamList] = useState();
   const [vList, setVList] = useState()
+  const [vTeachersList, setVTeachersList] = useState()
   async function fetchAllUsers() {
     try {
       let snapshot = await getAllUsers();
@@ -22,10 +25,27 @@ const List = ({ students, messages, vaccinated, covidStatus, exams }) => {
       snapshot.forEach((obj) => {
         var data = obj.data()
         data.docID = obj.id
-        list.push(data)
+        if (data.course) {
+          list.push(data)
+        }
       })
       setUserList(list)
       console.log(userList)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async function fetchAllTeachers() {
+    try {
+      let snapshot = await getAllTeachers();
+      let list = []
+      snapshot.forEach((obj) => {
+        var data = obj.data()
+        data.docID = obj.id
+        list.push(data)
+      })
+      setTeacherList(list)
+      console.log(teacherList)
     } catch (error) {
       console.log(error)
     }
@@ -40,6 +60,21 @@ const List = ({ students, messages, vaccinated, covidStatus, exams }) => {
         list.push(data)
       })
       setVList(list)
+      console.log(vList)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async function fetchVaccinatedTeachers() {
+    try {
+      let snapshot = await getVaccinatedTeachers();
+      let list = []
+      snapshot.forEach((obj) => {
+        var data = obj.data()
+        data.docID = obj.id
+        list.push(data)
+      })
+      setVTeachersList(list)
       console.log(vList)
     } catch (error) {
       console.log(error)
@@ -68,12 +103,20 @@ const List = ({ students, messages, vaccinated, covidStatus, exams }) => {
     }
   }
   useEffect(() => {
-    if (students || covidStatus)
+    if (students)
       fetchAllUsers();
-    else if (messages || exams) {
+    else if (messages || exams)
       fetchAllMessages();
-    } else if (vaccinated) {
+    else if (vaccinated && student)
       fetchVaccinatedUsers()
+    else if (vaccinated && teacher)
+      fetchVaccinatedTeachers()
+    else if (teachers) {
+      fetchAllTeachers();
+    } else if (student) {
+      fetchAllUsers();
+    } else if (teacher) {
+      fetchAllTeachers();
     }
   }, [])
   return (
@@ -82,10 +125,15 @@ const List = ({ students, messages, vaccinated, covidStatus, exams }) => {
       <div className="listContainer">
         <Navbar />
         {students && userList && <Datatable userList={userList} />}
-        {covidStatus && userList && <CovidTable userList={userList} />}
+        {teachers && teacherList && <TeacherTable teacherList={teacherList} />}
+
+        {covidStatus && student && userList && <CovidTable userList={userList} />}
+        {covidStatus && teacher && teacherList && <CovidTable teacherList={teacherList} />}
+
         {messages && msgList && <MessageTable messages={msgList} />}
         {exams && examList && <ExamTable exams={examList} />}
-        {vList && <VaccinatedTable userList={vList} />}
+        {student && vaccinated && vList && <VaccinatedTable vList={vList} />}
+        {teacher && vaccinated && vTeachersList && <VaccinatedTable vTeacherList={vTeachersList} />}
       </div>
     </div>
   )

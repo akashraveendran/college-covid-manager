@@ -15,18 +15,14 @@ export function AuthProvider({ children }) {
     function signup(email, password) {
         return auth.createUserWithEmailAndPassword(email, password)
     }
-
     function login(email, password) {
         return auth.signInWithEmailAndPassword(email, password)
     }
-
     function logout() {
         return auth.signOut()
     }
 
-    function resetPassword(email) {
-        return auth.sendPasswordResetEmail(email)
-    }
+
     function addUsertoDB(userdata) {
         return firestore.collection('userdata').add(userdata)
     }
@@ -57,6 +53,7 @@ export function AuthProvider({ children }) {
     function getVaccinatedUsers() {
         return firestore.collection('userdata').where("vaccinated", "==", "yes").get()
     }
+
     function getUsersCount() {
         firestore.collection('userdata').get().then((snapshot) => {
             console.log(snapshot.size)
@@ -69,6 +66,11 @@ export function AuthProvider({ children }) {
     function applyExam(examObj, docId) {
         return firestore.collection('notifications').doc(docId).set(examObj)
     }
+
+
+    function getAllTeachers() {
+        return firestore.collection('teacherdata').get()
+    }
     function addTeachertoDB(data) {
         return firestore.collection('teacherdata').add(data)
     }
@@ -77,6 +79,12 @@ export function AuthProvider({ children }) {
     }
     function updateTeacherData(data, id) {
         return firestore.collection('teacherdata').doc(id).set(data)
+    }
+    function deleteTeacher(docId) {
+        return firestore.collection('teacherdata').doc(docId).delete()
+    }
+    function getVaccinatedTeachers() {
+        return firestore.collection('teacherdata').where("vaccinated", "==", "yes").get()
     }
 
 
@@ -93,7 +101,6 @@ export function AuthProvider({ children }) {
         login,
         signup,
         logout,
-        resetPassword,
         addUsertoDB,
         getUserData,
         updateUserData,
@@ -109,7 +116,10 @@ export function AuthProvider({ children }) {
         applyExam,
         addTeachertoDB,
         getTeacherData,
-        updateTeacherData
+        updateTeacherData,
+        getAllTeachers,
+        deleteTeacher,
+        getVaccinatedTeachers
     }
 
     return (
