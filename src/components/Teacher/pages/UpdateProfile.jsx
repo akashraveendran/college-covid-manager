@@ -6,37 +6,34 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 
 function UpdateProfile() {
-    const [user, setUser] = useState();
-    const { currentUser, updateUserData, getUserData } = useAuth();
+    const [teacher, setTeacher] = useState();
+    const { currentUser, updateTeacherData, getTeacherData } = useAuth();
     useEffect(() => {
         setLoading(true)
         async function fetchdata() {
-            let usermail = currentUser.email;
+            let teachermail = currentUser.email;
             try {
-                let snapshot = await getUserData(usermail)
-                snapshot.forEach((s) => {
-                    setUser({ docId: s.id, ...s.data() })
-                    console.log(user)
+                let snapshot = await getTeacherData(teachermail)
+                snapshot.forEach((t) => {
+                    setTeacher({ docId: t.id, ...t.data() })
+                    console.log(teacher)
                 })
-
             } catch (error) {
                 console.log(error)
             }
-            setLoading(false)
-            setCovidStatus(user && user.covidStatus)
-            setVaccinated(user && user.vaccinated)
         }
         fetchdata();
+        setLoading(false)
+        setCovidStatus(teacher && teacher.covidStatus)
+        setVaccinated(teacher && teacher.vaccinated)
     }, [])
-    const [showDiv, setShowDiv] = useState(false);
 
     const [covidStatus, setCovidStatus] = useState();
     const [vaccinated, setVaccinated] = useState();
     const nameRef = useRef();
     const phoneRef = useRef();
     const emailRef = useRef();
-    const regRef = useRef();
-    const courseRef = useRef();
+    const subjectRef = useRef();
     const deptRef = useRef();
     const vaccinDateRef = useRef();
     const vaccinDoseRef = useRef();
@@ -48,28 +45,27 @@ function UpdateProfile() {
     const navigate = useNavigate()
     const submitted = async (e) => {
         e.preventDefault();
-        setCovidStatus(covidStatus ? covidStatus : user.covidStatus)
+        setCovidStatus(covidStatus ? covidStatus : teacher.covidStatus)
         console.log(covidStatus)
-        setVaccinated(vaccinated ? vaccinated : user.vaccinated)
-        let userObj = {
+        setVaccinated(vaccinated ? vaccinated : teacher.vaccinated)
+        let teacherObj = {
             name: nameRef.current.value,
             phoneNumber: phoneRef.current.value,
             email: emailRef.current.value,
-            regNumber: regRef.current.value,
             department: deptRef.current.value,
-            course: courseRef.current.value,
+            subject: subjectRef.current.value,
             covidStatus,
             vaccinated,
-            vaccinationDate: vaccinDateRef.current.value,
-            vaccinationDose: vaccinDoseRef.current.value
+            vaccinationDate: (vaccinDateRef.current != null ? vaccinDateRef.current.value : false),
+            vaccinationDose: (vaccinDoseRef.current != null ? vaccinDoseRef.current.value : false)
         }
-        console.log(userObj)
+        console.log(teacherObj, teacher.docId)
         try {
             setError("")
             setLoading(true)
-            updateUserData(userObj, user.docId).then((result) => {
+            updateTeacherData(teacherObj, teacher.docId).then((result) => {
                 console.log(result)
-                navigate("/profile");
+                navigate("/teacher/profile");
             })
         } catch (error) {
             setError(error.message)
@@ -88,7 +84,7 @@ function UpdateProfile() {
                 padding: "10vh"
             }}>
                 {
-                    user &&
+                    teacher &&
 
                     <Card sx={{ maxWidth: 380, p: 3, minHeight: 1200, display: 'flex', flexDirection: 'column', justifyContent: "space-evenly" }}>
                         <Typography color="text.secondary" fontSize={32} fontWeight={600} gutterBottom>
@@ -100,7 +96,7 @@ function UpdateProfile() {
                             required
                             placeholder="Name"
                             id="outlined-multiline-flexible"
-                            defaultValue={user.name}
+                            defaultValue={teacher.name}
                             inputRef={nameRef}
                         />
                         <TextField
@@ -108,7 +104,7 @@ function UpdateProfile() {
                             id="standard-helperText"
                             placeholder="Mobile Number"
                             type="number"
-                            defaultValue={parseInt(user.phoneNumber)}
+                            defaultValue={parseInt(teacher.phoneNumber)}
                             inputRef={phoneRef}
                         />
                         <TextField
@@ -116,36 +112,30 @@ function UpdateProfile() {
                             id="standard-helperText"
                             placeholder="Email id"
                             type="email"
-                            defaultValue={user.email}
+                            defaultValue={teacher.email}
                             inputRef={emailRef}
                         />
-                        <TextField
-                            required
-                            id="standard-helperText"
-                            placeholder="Register Number"
-                            type="number"
-                            defaultValue={parseInt(user.regNumber)}
-                            inputRef={regRef}
-                        />
+
                         <TextField
                             required
                             id="standard-helperText"
                             placeholder="Departmnet"
                             type="text"
-                            defaultValue={user.department}
+                            defaultValue={teacher.department}
                             inputRef={deptRef}
                         />
                         <TextField
                             required
                             id="standard-helperText"
-                            placeholder="Course"
+                            placeholder="Subject"
                             type="text"
-                            defaultValue={user.course}
+                            defaultValue={teacher.subject}
 
-                            inputRef={courseRef}
+                            inputRef={subjectRef}
                         />
                         <FormLabel style={{ fontSize: 22 }}>Covid Details</FormLabel>
                         <FormLabel id="demo-radio-buttons-group-label">Are you covid positive?</FormLabel>
+
                         {covidStatus == "yes" ? <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
@@ -153,8 +143,9 @@ function UpdateProfile() {
                             value="yes"
 
                         >
-                            <FormControlLabel value="yes" onClick={(e) => { setCovidStatus("yes") }} control={<Radio />} label="Yes" />
-                            <FormControlLabel value="no" onClick={(e) => { setCovidStatus("no") }} control={<Radio />} label="No" />
+
+                            <FormControlLabel value="yes" onClick={(e) => { setCovidStatus('yes') }} control={<Radio />} label="Yes" />
+                            <FormControlLabel value="no" onClick={(e) => { setCovidStatus('no') }} control={<Radio />} label="No" />
                         </RadioGroup>
                             :
                             <RadioGroup
@@ -163,7 +154,7 @@ function UpdateProfile() {
                                 required={true}
                                 value="no"
                             >
-                                <FormControlLabel value="yes" onClick={(e) => { setCovidStatus("yes") }} control={<Radio />} label="Yes" />
+                                <FormControlLabel value="yes" onClick={(e) => { setCovidStatus('yes') }} control={<Radio />} label="Yes" />
                                 <FormControlLabel value="no" onClick={(e) => { setCovidStatus("no") }} control={<Radio />} label="No" />
                             </RadioGroup>
                         }
@@ -176,10 +167,9 @@ function UpdateProfile() {
                                     name="radio-buttons-group"
                                     required={true}
                                     value="yes"
-
                                 >
-                                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setShowDiv(true); setVaccinated("yes") }} />
-                                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no"); vaccinDateRef.current.value = false; vaccinDoseRef.current.value = false }} />
+                                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setVaccinated("yes") }} />
+                                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setVaccinated("no"); vaccinDateRef.current.value = ""; vaccinDoseRef.current.value = "" }} />
                                 </RadioGroup>
                                 :
                                 <RadioGroup
@@ -187,32 +177,37 @@ function UpdateProfile() {
                                     name="radio-buttons-group"
                                     required={true}
                                     value="no"
-
                                 >
-                                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setShowDiv(true); setVaccinated("yes") }} />
-                                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no"); vaccinDateRef.current.value = false; vaccinDoseRef.current.value = false }} />
+                                    <FormControlLabel value="yes" control={<Radio />} label="Yes" onClick={(e) => { setVaccinated("yes") }} />
+                                    <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setVaccinated("no"); vaccinDateRef.current.value = ""; vaccinDoseRef.current.value = "" }} />
                                 </RadioGroup>
                         }
 
-                        <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>
-                        <TextField
-                            disabled={!(vaccinated == "yes")}
-                            required
-                            id="standard-helperText"
-                            type="date"
-                            defaultValue={user.vaccinationDate}
+                        {
+                            vaccinated == "yes" &&
+                            <>
 
-                            inputRef={vaccinDateRef}
-                        />
-                        <TextField
-                            disabled={!(vaccinated == "yes")}
-                            required
-                            id="standard-helperText"
-                            placeholder="Number of doses"
-                            type="number"
-                            defaultValue={user.vaccinationDose}
-                            inputRef={vaccinDoseRef}
-                        />
+                                <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>
+                                <TextField
+
+                                    required
+                                    id="standard-helperText"
+                                    type="date"
+                                    defaultValue={teacher.vaccinationDate}
+
+                                    inputRef={vaccinDateRef}
+                                />
+                                <TextField
+
+                                    required
+                                    id="standard-helperText"
+                                    placeholder="Number of doses"
+                                    type="number"
+                                    defaultValue={teacher.vaccinationDose}
+                                    inputRef={vaccinDoseRef}
+                                />
+                            </>
+                        }
                         <Button disabled={loading} variant="contained" onClick={submitted}>Update data</Button>
                     </Card>
                 }

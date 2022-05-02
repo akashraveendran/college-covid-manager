@@ -33,8 +33,8 @@ export function AuthProvider({ children }) {
     function getUserData(email) {
         return firestore.collection('userdata').where("email", "==", email).get()
     }
-    function updateUserData(userdata) {
-        return firestore.collection('userdata').doc("b9YR5nk0MOraIFa9h3TD").set(userdata)
+    function updateUserData(userdata, docId) {
+        return firestore.collection('userdata').doc(docId).set(userdata)
     }
     function sendMessage(msgObj) {
         return firestore.collection('notifications').add(msgObj)
@@ -69,6 +69,15 @@ export function AuthProvider({ children }) {
     function applyExam(examObj, docId) {
         return firestore.collection('notifications').doc(docId).set(examObj)
     }
+    function addTeachertoDB(data) {
+        return firestore.collection('teacherdata').add(data)
+    }
+    function getTeacherData(email) {
+        return firestore.collection('teacherdata').where("email", "==", email).get()
+    }
+    function updateTeacherData(data, id) {
+        return firestore.collection('teacherdata').doc(id).set(data)
+    }
 
 
     useEffect(() => {
@@ -97,7 +106,10 @@ export function AuthProvider({ children }) {
         getUsersCount,
         deleteUser,
         getExamNotifications,
-        applyExam
+        applyExam,
+        addTeachertoDB,
+        getTeacherData,
+        updateTeacherData
     }
 
     return (

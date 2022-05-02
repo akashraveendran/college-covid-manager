@@ -18,9 +18,17 @@ import ContactPage from './components/Student/Pages/ContactPage';
 import Profile from './components/Student/Pages/Profile';
 import UpdateProfile from './components/Student/Pages/UpdateProfile';
 import Notifications from './components/Student/Pages/Notifications';
-import PrivateRoute from './components/PrivateRoute';
+import StudentRoute from './components/StudentRoute';
 import AdminRoute from './components/AdminRoute';
 import NewExam from "./pages/new/NewExam";
+import TeacherRegister from "./components/Teacher/pages/TeacherRegister";
+import TeacherHomePage from "./components/Teacher/pages/TeacherHomePage";
+import TeacherProfile from "./components/Teacher/pages/TeacherProfile";
+import TeacherUpdateProfile from "./components/Teacher/pages/UpdateProfile";
+import TeacherRoute from "./components/TeacherRoute";
+import TeacherLogin from "./components/Teacher/pages/TeacherLogin";
+import TeacherContactPage from "./components/Teacher/pages/TeacherContactPage";
+import TeacherNotifications from "./components/Teacher/pages/TeacherNotifications";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -48,13 +56,23 @@ function App() {
               <Route path="messages" element={<AdminRoute><List messages="Messages" /></AdminRoute>} />
             </Route>
             <Route path='/' >
-              <Route index element={<PrivateRoute><HomePage /></PrivateRoute>} />
-              <Route path='contact' element={<PrivateRoute><ContactPage /></PrivateRoute>} />
-              <Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
-              <Route path='update-profile' element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
-              <Route path='notifications' element={<PrivateRoute><Notifications /></PrivateRoute>} />
-              <Route path='login' element={<StudentLogin />} />
               <Route path='register' element={<Register />} />
+              <Route path='login' element={<StudentLogin />} />
+              <Route index element={<StudentRoute><HomePage /></StudentRoute>} />
+              <Route path='contact' element={<StudentRoute><ContactPage /></StudentRoute>} />
+              <Route path='profile' element={<StudentRoute><Profile /></StudentRoute>} />
+              <Route path='update-profile' element={<StudentRoute><UpdateProfile /></StudentRoute>} />
+              <Route path='notifications' element={<StudentRoute><Notifications /></StudentRoute>} />
+            </Route>
+            <Route path='/teacher' >
+
+              <Route path='register' element={<TeacherRegister />} />
+              <Route path='login' element={<TeacherLogin />} />
+              <Route index element={<TeacherRoute><TeacherHomePage /></TeacherRoute>} />
+              <Route path='profile' element={<TeacherRoute><TeacherProfile /></TeacherRoute>} />
+              <Route path='update-profile' element={<TeacherRoute><TeacherUpdateProfile /></TeacherRoute>} />
+              <Route path='contact' element={<TeacherRoute><TeacherContactPage /></TeacherRoute>} />
+              <Route path='notifications' element={<TeacherRoute><TeacherNotifications /></TeacherRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

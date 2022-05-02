@@ -8,21 +8,21 @@ import { useAuth } from '../../../store/AuthContext'
 import { firestore } from '../../../firebase/config'
 import { useNavigate } from 'react-router-dom'
 
-function HomePage() {
+function TeacherHomePage() {
     const { currentUser } = useAuth()
     const [std, setStd] = useState(false)
     const navigate = useNavigate()
-    async function checkStudent() {
-        firestore.collection('userdata').where('email', '==', currentUser.email).get().then((result) => {
+    async function checkTeacher() {
+        firestore.collection('teacherdata').where('email', '==', currentUser.email).get().then((result) => {
             if (result.size == 0) {
-                navigate("/login")
+                navigate("/teacher/login")
             } else {
                 setStd(true)
             }
         })
     }
     useEffect(() => {
-        checkStudent();
+        checkTeacher();
     }, [])
     return (
         <>
@@ -39,4 +39,4 @@ function HomePage() {
     )
 }
 
-export default HomePage
+export default TeacherHomePage
