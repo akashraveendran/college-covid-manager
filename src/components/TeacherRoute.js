@@ -4,5 +4,7 @@ import { useAuth } from '../store/AuthContext'
 
 export default function TeacherRoute({ children }) {
     const { currentUser } = useAuth()
-    return currentUser.displayName == "TEACHER" ? children : <Navigate to="/teacher/login" />
+    if (currentUser)
+        return currentUser.displayName == "TEACHER" ? children : <Navigate to="/teacher/login" />
+    else return <Navigate to="/teacher/login" />
 }

@@ -55,6 +55,7 @@ function App() {
               </Route>
               <Route path="messages" element={<AdminRoute><List messages="Messages" /></AdminRoute>} />
             </Route>
+
             <Route path='/' >
               <Route path='register' element={<Register />} />
               <Route path='login' element={<StudentLogin />} />
@@ -64,8 +65,8 @@ function App() {
               <Route path='update-profile' element={<StudentRoute><UpdateProfile /></StudentRoute>} />
               <Route path='notifications' element={<StudentRoute><Notifications /></StudentRoute>} />
             </Route>
-            <Route path='/teacher' >
 
+            <Route path='/teacher' >
               <Route path='register' element={<TeacherRegister />} />
               <Route path='login' element={<TeacherLogin />} />
               <Route index element={<TeacherRoute><TeacherHomePage /></TeacherRoute>} />
