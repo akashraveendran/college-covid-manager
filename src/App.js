@@ -18,6 +18,7 @@ import ContactPage from './components/Student/Pages/ContactPage';
 import Profile from './components/Student/Pages/Profile';
 import UpdateProfile from './components/Student/Pages/UpdateProfile';
 import Notifications from './components/Student/Pages/Notifications';
+import ExamNotifications from './components/Student/Pages/ExamNotifications';
 import StudentRoute from './components/StudentRoute';
 import AdminRoute from './components/AdminRoute';
 import NewExam from "./pages/new/NewExam";
@@ -76,6 +77,7 @@ function App() {
               <Route path='profile' element={<StudentRoute><Profile /></StudentRoute>} />
               <Route path='update-profile' element={<StudentRoute><UpdateProfile /></StudentRoute>} />
               <Route path='notifications' element={<StudentRoute><Notifications /></StudentRoute>} />
+              <Route path='exam-notifications' element={<StudentRoute><ExamNotifications /></StudentRoute>} />
             </Route>
 
             <Route path='/teacher' >
