@@ -1,32 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Alert, Button, Card, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
 import { useAuth } from "../../../store/AuthContext"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Navbar from '../Navbar';
 
 function UpdateProfile() {
     const [user, setUser] = useState();
-    const { currentUser, updateUserData, getUserData } = useAuth();
+    const { updateUserData } = useAuth();
+    const location = useLocation()
     useEffect(() => {
         setLoading(true)
-        async function fetchdata() {
-            let usermail = currentUser.email;
-            try {
-                let snapshot = await getUserData(usermail)
-                snapshot.forEach((s) => {
-                    setUser({ docId: s.id, ...s.data() })
-                    console.log(user)
-                })
-
-            } catch (error) {
-                console.log(error)
-            }
-            setLoading(false)
-            setCovidStatus(user && user.covidStatus)
-            setVaccinated(user && user.vaccinated)
-        }
-        fetchdata();
+        setUser(location.state.user)
+        setLoading(false)
+        setCovidStatus(location.state.user && location.state.user.covidStatus)
+        setVaccinated(location.state.user && location.state.user.vaccinated)
     }, [])
     const [showDiv, setShowDiv] = useState(false);
 
@@ -60,10 +48,10 @@ function UpdateProfile() {
             course: courseRef.current.value,
             covidStatus,
             vaccinated,
-            vaccinationDate: vaccinDateRef.current.value,
-            vaccinationDose: vaccinDoseRef.current.value
+            vaccinationDate: (vaccinDateRef.current != null ? vaccinDateRef.current.value : false),
+            vaccinationDose: (vaccinDoseRef.current != null ? vaccinDoseRef.current.value : false)
         }
-        console.log(userObj)
+        console.log(userObj, user.docId)
         try {
             setError("")
             setLoading(true)
@@ -193,26 +181,28 @@ function UpdateProfile() {
                                     <FormControlLabel value="no" control={<Radio />} label="No" onClick={(e) => { setShowDiv(false); setVaccinated("no"); vaccinDateRef.current.value = false; vaccinDoseRef.current.value = false }} />
                                 </RadioGroup>
                         }
+                        {
+                            vaccinated == "yes" &&
+                            <>
+                                <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>
+                                <TextField
+                                    required
+                                    id="standard-helperText"
+                                    type="date"
+                                    defaultValue={user.vaccinationDate}
 
-                        <FormLabel id="demo-radio-buttons-group-label">if yes when ?</FormLabel>
-                        <TextField
-                            disabled={!(vaccinated == "yes")}
-                            required
-                            id="standard-helperText"
-                            type="date"
-                            defaultValue={user.vaccinationDate}
-
-                            inputRef={vaccinDateRef}
-                        />
-                        <TextField
-                            disabled={!(vaccinated == "yes")}
-                            required
-                            id="standard-helperText"
-                            placeholder="Number of doses"
-                            type="number"
-                            defaultValue={user.vaccinationDose}
-                            inputRef={vaccinDoseRef}
-                        />
+                                    inputRef={vaccinDateRef}
+                                />
+                                <TextField
+                                    required
+                                    id="standard-helperText"
+                                    placeholder="Number of doses"
+                                    type="number"
+                                    defaultValue={user.vaccinationDose}
+                                    inputRef={vaccinDoseRef}
+                                />
+                            </>
+                        }
                         <Button disabled={loading} variant="contained" onClick={submitted}>Update data</Button>
                     </Card>
                 }

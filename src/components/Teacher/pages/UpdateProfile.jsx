@@ -1,31 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Alert, Button, Card, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
 import { useAuth } from "../../../store/AuthContext"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Navbar from '../Navbar';
 
 function UpdateProfile() {
     const [teacher, setTeacher] = useState();
-    const { currentUser, updateTeacherData, getTeacherData } = useAuth();
+    const { updateTeacherData } = useAuth();
+    const location = useLocation()
     useEffect(() => {
         setLoading(true)
-        async function fetchdata() {
-            let teachermail = currentUser.email;
-            try {
-                let snapshot = await getTeacherData(teachermail)
-                snapshot.forEach((t) => {
-                    setTeacher({ docId: t.id, ...t.data() })
-                    console.log(teacher)
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchdata();
+        setTeacher(location.state.teacher)
         setLoading(false)
-        setCovidStatus(teacher && teacher.covidStatus)
-        setVaccinated(teacher && teacher.vaccinated)
+        setCovidStatus(location.state.teacher && location.state.teacher.covidStatus)
+        setVaccinated(location.state.teacher && location.state.teacher.vaccinated)
     }, [])
 
     const [covidStatus, setCovidStatus] = useState();
@@ -38,16 +27,11 @@ function UpdateProfile() {
     const vaccinDateRef = useRef();
     const vaccinDoseRef = useRef();
 
-
-
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const submitted = async (e) => {
         e.preventDefault();
-        setCovidStatus(covidStatus ? covidStatus : teacher.covidStatus)
-        console.log(covidStatus)
-        setVaccinated(vaccinated ? vaccinated : teacher.vaccinated)
         let teacherObj = {
             name: nameRef.current.value,
             phoneNumber: phoneRef.current.value,
@@ -70,8 +54,8 @@ function UpdateProfile() {
         } catch (error) {
             setError(error.message)
             console.log(error)
+            setLoading(false)
         }
-        setLoading(false)
     }
     return (
         <div>

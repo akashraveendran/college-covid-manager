@@ -52,7 +52,7 @@ function App() {
                 <Route path="Exams" element={<AdminRoute><List exams="Exams" /></AdminRoute>} />
                 <Route
                   path="new"
-                  element={<AdminRoute><NewTeacher title="Add New Student" /></AdminRoute>}
+                  element={<AdminRoute><New title="Add New Student" /></AdminRoute>}
                 />
               </Route>
               <Route path="messages" element={<AdminRoute><List messages="Messages" /></AdminRoute>} />

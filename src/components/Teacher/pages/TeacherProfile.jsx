@@ -13,7 +13,10 @@ function Profile() {
         let teachermail = currentUser.email;
         try {
             let snapshot = await getTeacherData(teachermail)
-            setTeacher(snapshot.docs[0].data())
+            snapshot.forEach((t) => {
+                let data = t.data()
+                setTeacher({ docId: t.id, ...data })
+            })
             console.log(teacher)
         } catch (error) {
             console.log(error)
@@ -28,12 +31,13 @@ function Profile() {
                     <Typography fontSize={'28px'} fontWeight={700}>{teacher && teacher.name} </Typography>
                     <Typography fontSize={'25px'}>{teacher && teacher.department} </Typography>
                 </div>
-                <div className="data">
-                    <div className="title-container">
-                        <Typography fontSize={'25px'} fontWeight={500}>Your Status</Typography>
-                        <Button variant="contained" onClick={() => navigate("/teacher/update-profile")}>Update</Button>
-                    </div>{
-                        teacher &&
+                {teacher &&
+                    <div className="data">
+                        <div className="title-container">
+                            <Typography fontSize={'25px'} fontWeight={500}>Your Status</Typography>
+                            <Button variant="contained" onClick={() => navigate("/teacher/update-profile", { state: { teacher } })}>Update</Button>
+                        </div>
+
 
                         <Card sx={{ minWidth: "50vw", p: 3, mb: 3, minHeight: '300px', display: 'flex', justifyContent: "space-evenly", alignItems: 'center' }}>
                             <div style={{ display: "flex", flexDirection: "column", height: '80%' }}>
@@ -52,9 +56,9 @@ function Profile() {
 
                             </div>
                         </Card>
-                    }
-                </div>
 
+                    </div>
+                }
             </div>
         </>
     )

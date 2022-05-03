@@ -13,8 +13,10 @@ function Profile() {
         let usermail = currentUser.email;
         try {
             let snapshot = await getUserData(usermail)
-            setUser(snapshot.docs[0].data())
-            console.log(user)
+            snapshot.forEach((s) => {
+                setUser({ docId: s.id, ...s.data() })
+                console.log(user)
+            })
         } catch (error) {
             console.log(error)
         }
@@ -28,13 +30,12 @@ function Profile() {
                     <Typography fontSize={'28px'} fontWeight={700}>{user && user.name} </Typography>
                     <Typography fontSize={'25px'}>{user && user.course} </Typography>
                 </div>
-                <div className="data">
-                    <div className="title-container">
-                        <Typography fontSize={'25px'} fontWeight={500}>Your Status</Typography>
-                        <Button onClick={() => navigate("/update-profile")}>Update</Button>
-                    </div>{
-                        user &&
-
+                {user &&
+                    <div className="data">
+                        <div className="title-container">
+                            <Typography fontSize={'25px'} fontWeight={500}>Your Profile</Typography>
+                            <Button onClick={() => navigate("/update-profile", { state: { user } })} variant="contained">Update</Button>
+                        </div>
                         <Card sx={{ minWidth: "50vw", p: 3, mb: 3, minHeight: '300px', display: 'flex', justifyContent: "space-evenly", alignItems: 'center' }}>
                             <div style={{ display: "flex", flexDirection: "column", height: '80%' }}>
                                 <p>Name : {user.name}</p>
@@ -50,12 +51,10 @@ function Profile() {
                                     user.vaccinated == "yes" && <><p>Date : {user.vaccinationDate}</p>
                                         <p>Dose : {user.vaccinationDose}</p></>
                                 }
-
                             </div>
                         </Card>
-                    }
-                </div>
-
+                    </div>
+                }
             </div>
         </>
     )
